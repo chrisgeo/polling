@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Polling Test</title>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?3.4.0/build/widget-base/assets/skins/sam/widget-base.css&3.4.0/build/console/assets/skins/sam/console.css">
+    <!-- JS -->
+    <script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+    <script type="text/javascript" src="./poll.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+    <button sm-poll>Start Poll</button>
+    <button sm-poll>Stop Poll</button>
+<script type="text/javascript">
+    YUI().use('node', 'console', 'io', 'poll', 'event', function(Y){
+        new Y.Console().render();
+        var poll = new Y.Poll({
+                on: {
+                    success: function(id, o){
+                        Y.log(o.responseText);
+                    },
+                    failure: function(id, o){
+                        Y.log(o.responseText);
+                    }
+
+                }
+            }),
+            buttons = Y.all('button[sm-poll]');
+            
+        buttons.item(0).on('click', function(e){
+            Y.log('Starting poll');
+            poll.start('http://localhost:8000', 5000);
+        });
+
+        buttons.item(1).on('click', function(e){
+            Y.log('Stopping poll');
+            poll.stop();
+        });
+    });
+</script>
+</body>
+</html>
